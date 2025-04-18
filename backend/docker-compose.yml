@@ -1,0 +1,10 @@
+services:
+  db_pontoqr:
+    image: postgres
+    container_name: phonetic-db
+    environment:
+      POSTGRES_DB: phonetic
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: senha
+    ports:
+      - "5433:5432"
