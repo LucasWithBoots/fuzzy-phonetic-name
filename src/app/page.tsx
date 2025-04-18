@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { getSimilar } from "@/http/Phonetics";
+import { getSimilar, postPhonetic } from "@/http/Phonetics";
 import { useEffect, useState } from "react";
 import { IPhoneticResponse } from "@/interfaces/IPhonetic";
 import { Button } from "@/components/ui/button";
@@ -41,50 +41,63 @@ export default function Home() {
   const nameValue = watch("name");
 
   const onSubmit = async (data: Inputs) => {
-    console.log(data);
     try {
-      const res = await getSimilar(data);
-      setList(res);
+      const res = await postPhonetic({ name: data.name });
+      setList((prevList) => [...prevList, res]);
     } catch (error) {
-      console.error("Error fetching similar phonetics:", error);
+      console.error("Error posting phonetic:", error);
     }
   };
 
   useEffect(() => {
-    onSubmit({ name: nameValue });
+    const fetch = async () => {
+      try {
+        const res = await getSimilar({ name: nameValue });
+        setList(res);
+      } catch (error) {
+        console.error("Error fetching similar phonetics:", error);
+      }
+    };
+
+    fetch();
   }, [nameValue]);
 
   return (
-    <div className="flex items-center justify-center h-screen flex-col mx-100 gap-10">
+    <div className="flex items-center justify-center h-screen flex-col  gap-10">
+      <h1 className="text-2xl font-black">Fuzzy Phonetic Name</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row gap-4">
         <Controller
           name="name"
           control={control}
-          render={({ field }) => <Input {...field} />}
+          render={({ field }) => (
+            <Input {...field} className="w-100" placeholder="Fulano de Town" />
+          )}
         />
 
-        {/* <Button type="submit">Enviar</Button> */}
+        <Button type="submit">Adicionar</Button>
       </form>
 
-      <Table>
-        <TableCaption>Resultados da sua pesquisa</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Id</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="text-right">Hash</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {list.map((item) => (
+      <div className="w-180">
+        <Table>
+          <TableCaption>Resultados da sua pesquisa</TableCaption>
+          <TableHeader>
             <TableRow>
-              <TableCell className="font-medium">{item.id}</TableCell>
-              <TableCell>{item.name}</TableCell>
-              <TableCell className="text-right">{item.code}</TableCell>
+              <TableHead className="w-[100px]">Id</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead className="text-right">Hash</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {list.map((item) => (
+              <TableRow>
+                <TableCell className="font-medium">{item.id}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell className="text-right">{item.code}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
