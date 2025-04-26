@@ -1,5 +1,5 @@
 services:
-  db_pontoqr:
+  db_phonetic:
     image: postgres
     container_name: phonetic-db
     environment:
