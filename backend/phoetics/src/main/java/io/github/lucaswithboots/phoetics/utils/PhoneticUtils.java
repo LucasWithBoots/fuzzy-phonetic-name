@@ -5,9 +5,15 @@ import java.util.Arrays;
 public class PhoneticUtils {
     private static final int MAX_DISTANCE = 2; // Ajuste este valor conforme necessário
 
-    public static boolean isSimilar(String code1, String code2) {
-        int distance = calculateLevenshteinDistance(code1, code2);
-        return distance <= MAX_DISTANCE;
+    public static boolean isSimilar(String searchCode, String targetCode) {
+        // Verifica similaridade por distância Levenshtein
+        int distance = calculateLevenshteinDistance(searchCode, targetCode);
+        boolean withinDistance = distance <= MAX_DISTANCE;
+
+        // Verifica se um código é parte do outro (como LIKE)
+        boolean containsMatch = targetCode.contains(searchCode) || searchCode.contains(targetCode);
+
+        return withinDistance || containsMatch;
     }
 
     private static int calculateLevenshteinDistance(String x, String y) {

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface PhoneticService {
 
+    long count();
+
     Phonetic save(Phonetic phonetic);
     List<Phonetic> findByName(String name);
 }

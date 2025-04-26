@@ -36,4 +36,10 @@ public class PhoneticServiceImpl implements PhoneticService {
                 .filter(p -> PhoneticUtils.isSimilar(inputCode, p.getCode()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public long count() {
+        return phoneticRepository.count();
+    }
+
 }
