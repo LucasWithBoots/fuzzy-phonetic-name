@@ -7,14 +7,10 @@ import lombok.Data;
 @Entity
 @Table(name="phonetics")
 public class Phonetic {
-
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
         private String name;
-
         private String code;
-
-
 }

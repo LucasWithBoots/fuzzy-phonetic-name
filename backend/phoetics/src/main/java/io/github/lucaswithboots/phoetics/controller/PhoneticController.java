@@ -35,7 +35,7 @@ public class PhoneticController {
     public ResponseEntity<Phonetic> create(@RequestBody PhoneticDTO phoneticDTO){
         Phonetic phonetic = new Phonetic();
 
-        String metaphoneCode = new MetaphonePtBr(phoneticDTO.getName()).toString();
+        String metaphoneCode = new MetaphonePtBr(phoneticDTO.getName()).toString().replaceAll("\\s+", "");
         phonetic.setName(phoneticDTO.getName());
         phonetic.setCode(metaphoneCode);
 
